@@ -7,6 +7,7 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	slogcommon "github.com/samber/slog-common"
 )
 
 type Option struct {
@@ -18,6 +19,10 @@ type Option struct {
 
 	// optional: customize json payload builder
 	Converter Converter
+
+	// optional: see slog.HandlerOptions
+	AddSource   bool
+	ReplaceAttr func(groups []string, a slog.Attr) slog.Attr
 }
 
 func (o Option) NewZerologHandler() slog.Handler {
@@ -56,7 +61,7 @@ func (h *ZerologHandler) Handle(ctx context.Context, record slog.Record) error {
 	}
 
 	level := levelMap[record.Level]
-	args := converter(h.attrs, &record)
+	args := converter(h.option.AddSource, h.option.ReplaceAttr, h.attrs, h.groups, &record)
 
 	h.option.Logger.
 		WithLevel(level).
@@ -71,7 +76,7 @@ func (h *ZerologHandler) Handle(ctx context.Context, record slog.Record) error {
 func (h *ZerologHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
 	return &ZerologHandler{
 		option: h.option,
-		attrs:  appendAttrsToGroup(h.groups, h.attrs, attrs),
+		attrs:  slogcommon.AppendAttrsToGroup(h.groups, h.attrs, attrs...),
 		groups: h.groups,
 	}
 }
