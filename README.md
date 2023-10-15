@@ -57,18 +57,18 @@ GoDoc: [https://pkg.go.dev/github.com/samber/slog-zerolog](https://pkg.go.dev/gi
 
 ```go
 type Option struct {
-	// log level (default: debug)
-	Level slog.Leveler
+    // log level (default: debug)
+    Level slog.Leveler
 
-	// optional: zerolog logger (default: zerolog.Logger)
-	Logger *zerolog.Logger
+    // optional: zerolog logger (default: zerolog.Logger)
+    Logger *zerolog.Logger
 
-	// optional: customize json payload builder
-	Converter Converter
+    // optional: customize json payload builder
+    Converter Converter
 
-	// optional: see slog.HandlerOptions
-	AddSource   bool
-	ReplaceAttr func(groups []string, a slog.Attr) slog.Attr
+    // optional: see slog.HandlerOptions
+    AddSource   bool
+    ReplaceAttr func(groups []string, a slog.Attr) slog.Attr
 }
 ```
 
@@ -83,16 +83,16 @@ slogzerolog.ErrorKeys = []string{"error", "err"}
 
 ```go
 import (
-	"github.com/rs/zerolog"
-	slogzerolog "github.com/samber/slog-zerolog"
-	"os"
+    "github.com/rs/zerolog"
+    slogzerolog "github.com/samber/slog-zerolog"
+    "os"
     "log/slog"
 )
 
 func main() {
-	zerologLogger := zerolog.New(zerolog.ConsoleWriter{Out: os.Stderr})
+    zerologLogger := zerolog.New(zerolog.ConsoleWriter{Out: os.Stderr})
 
-	logger := slog.New(slogzerolog.Option{Level: slog.LevelDebug, Logger: &zerologLogger}.NewZerologHandler())
+    logger := slog.New(slogzerolog.Option{Level: slog.LevelDebug, Logger: &zerologLogger}.NewZerologHandler())
     logger = logger.
         With("environment", "dev").
         With("release", "v1.0.0")
