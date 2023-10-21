@@ -52,7 +52,7 @@ No breaking changes will be made to exported APIs before v3.0.0.
 
 ## 💡 Usage
 
-GoDoc: [https://pkg.go.dev/github.com/samber/slog-zerolog](https://pkg.go.dev/github.com/samber/slog-zerolog)
+GoDoc: [https://pkg.go.dev/github.com/samber/slog-zerolog/v2](https://pkg.go.dev/github.com/samber/slog-zerolog/v2)
 
 ### Handler options
 
