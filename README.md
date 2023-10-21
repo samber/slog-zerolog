@@ -43,7 +43,7 @@ A [Zerolog](https://github.com/rs/zerolog) Handler for [slog](https://pkg.go.dev
 ## 🚀 Install
 
 ```sh
-go get github.com/samber/slog-zerolog
+go get github.com/samber/slog-zerolog/v2
 ```
 
 **Compatibility**: go >= 1.21
