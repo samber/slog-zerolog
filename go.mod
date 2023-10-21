@@ -1,4 +1,4 @@
-module github.com/samber/slog-zerolog
+module github.com/samber/slog-zerolog/v2
 
 go 1.21
 

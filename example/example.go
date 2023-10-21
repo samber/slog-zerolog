@@ -8,7 +8,7 @@ import (
 	"log/slog"
 
 	"github.com/rs/zerolog"
-	slogzerolog "github.com/samber/slog-zerolog"
+	slogzerolog "github.com/samber/slog-zerolog/v2"
 )
 
 func main() {

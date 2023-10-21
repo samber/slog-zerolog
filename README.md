@@ -48,7 +48,7 @@ go get github.com/samber/slog-zerolog
 
 **Compatibility**: go >= 1.21
 
-No breaking changes will be made to exported APIs before v2.0.0.
+No breaking changes will be made to exported APIs before v3.0.0.
 
 ## 💡 Usage
 
@@ -85,7 +85,7 @@ slogzerolog.ErrorKeys = []string{"error", "err"}
 ```go
 import (
     "github.com/rs/zerolog"
-    slogzerolog "github.com/samber/slog-zerolog"
+    slogzerolog "github.com/samber/slog-zerolog/v2"
     "os"
     "log/slog"
 )
