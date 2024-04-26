@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/rs/zerolog v1.30.0
-	github.com/samber/slog-common v0.15.2
+	github.com/samber/slog-common v0.16.0
 	go.uber.org/goleak v1.2.1
 )
 
