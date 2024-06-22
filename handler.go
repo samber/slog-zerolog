@@ -25,6 +25,9 @@ type Option struct {
 	// optional: see slog.HandlerOptions
 	AddSource   bool
 	ReplaceAttr func(groups []string, a slog.Attr) slog.Attr
+
+	// optional: don't add timestamp
+	NoTimestamp bool
 }
 
 func (o Option) NewZerologHandler() slog.Handler {
@@ -70,12 +73,15 @@ func (h *ZerologHandler) Handle(ctx context.Context, record slog.Record) error {
 	fromContext := slogcommon.ContextExtractor(ctx, h.option.AttrFromContext)
 	args := converter(h.option.AddSource, h.option.ReplaceAttr, append(h.attrs, fromContext...), h.groups, &record)
 
-	h.option.Logger.
+	event := h.option.Logger.
 		WithLevel(level).
-		Ctx(ctx).
-		Time(zerolog.TimestampFieldName, record.Time).
-		Fields(args).
-		Msg(record.Message)
+		Ctx(ctx)
+
+	if !h.option.NoTimestamp {
+		event.Time(zerolog.TimestampFieldName, record.Time)
+	}
+
+	event.Fields(args).Msg(record.Message)
 
 	return nil
 }
