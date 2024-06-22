@@ -77,6 +77,8 @@ type Option struct {
 
     // optional: zerolog logger (default: zerolog.Logger)
     Logger *zerolog.Logger
+    // optional: don't add timestamp to record
+    NoTimestamp bool
 
     // optional: customize json payload builder
     Converter Converter

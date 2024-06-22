@@ -16,6 +16,8 @@ type Option struct {
 
 	// optional: zerolog logger (default: zerolog.Logger)
 	Logger *zerolog.Logger
+	// optional: don't add timestamp to record
+	NoTimestamp bool
 
 	// optional: customize json payload builder
 	Converter Converter
@@ -25,9 +27,6 @@ type Option struct {
 	// optional: see slog.HandlerOptions
 	AddSource   bool
 	ReplaceAttr func(groups []string, a slog.Attr) slog.Attr
-
-	// optional: don't add timestamp
-	NoTimestamp bool
 }
 
 func (o Option) NewZerologHandler() slog.Handler {
