@@ -94,6 +94,11 @@ func (h *ZerologHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
 }
 
 func (h *ZerologHandler) WithGroup(name string) slog.Handler {
+	// https://cs.opensource.google/go/x/exp/+/46b07846:slog/handler.go;l=247
+	if name == "" {
+		return h
+	}
+
 	return &ZerologHandler{
 		option: h.option,
 		attrs:  h.attrs,
