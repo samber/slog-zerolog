@@ -74,7 +74,8 @@ func (h *ZerologHandler) Handle(ctx context.Context, record slog.Record) error {
 
 	event := h.option.Logger.
 		WithLevel(level).
-		Ctx(ctx)
+		Ctx(ctx).
+		CallerSkipFrame(3)
 
 	if !h.option.NoTimestamp {
 		event.Time(zerolog.TimestampFieldName, record.Time)
