@@ -24,6 +24,7 @@ func init() {
 }
 
 // ZeroLogLeveler can be used for Option.Level (implements slog.Leveler).
+// If no Logger is provided, the global zerolog.Logger is used.
 type ZeroLogLeveler struct {
 	// optional: zerolog logger (default: log.Logger)
 	Logger *zerolog.Logger
