@@ -25,13 +25,33 @@ func init() {
 
 // ZeroLogLeveler can be used for Option.Level (implements slog.Leveler).
 type ZeroLogLeveler struct {
+	// optional: zerolog logger (default: log.Logger)
+	Logger *zerolog.Logger
 }
 
-func (ZeroLogLeveler) Level() slog.Level {
-	zeroLogLevel := log.Logger.GetLevel()
+var _ slog.Leveler = ZeroLogLeveler{}
+
+func (z ZeroLogLeveler) Level() slog.Level {
+	var logger = log.Logger
+	if z.Logger != nil {
+		logger = *z.Logger
+	}
+	zeroLogLevel := logger.GetLevel()
 	level, ok := reverseLogLevels[zeroLogLevel]
 	if !ok {
-		return slog.LevelDebug
+		switch zeroLogLevel {
+		case zerolog.PanicLevel, zerolog.FatalLevel:
+			return slog.LevelError
+		case zerolog.NoLevel:
+			return slog.LevelInfo
+		case zerolog.Disabled:
+			return slog.LevelDebug - 1
+		default:
+			if zeroLogLevel < zerolog.DebugLevel {
+				return slog.Level(int(slog.LevelDebug) + int(zeroLogLevel))
+			}
+			return slog.LevelInfo
+		}
 	}
 	return level
 }
