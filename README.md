@@ -89,6 +89,7 @@ GoDoc: [https://pkg.go.dev/github.com/samber/slog-zerolog/v2](https://pkg.go.dev
 ```go
 type Option struct {
     // log level (default: debug)
+	// you can use ZeroLogLeveler to retrieve the level from the global zerolog instance or a custom one
     Level slog.Leveler
 
     // optional: zerolog logger (default: zerolog.Logger)
@@ -185,6 +186,44 @@ func main() {
 	)
 
 	logger.ErrorContext(ctx, "a message")
+}
+```
+
+### Zerolog level mapping
+
+Use the `slogzerolog.ZeroLogLeveler` as `slogzerolog.Option.Level` (`slog.Leveler`) to set the `slog.Level` from 
+`zerolog.Level`.
+
+Currently following levels are mapped:
+
+| zerolog  | slog      | 
+|----------|-----------| 
+| Trace-N  | Debug-1-N | 
+| Trace    | Debug-1   | 
+| Debug    | Debug     | 
+| Info     | Info      | 
+| Warn     | Warn      | 
+| Error    | Error     | 
+| Panic    | Error     | 
+| Fatal    | Error     | 
+| NoLevel  | Info      | 
+| Disabled | Debug-1   |
+| *        | Info      |
+
+```go
+import (
+    "github.com/rs/zerolog"
+    slogzerolog "github.com/samber/slog-zerolog/v2"
+    "os"
+    "log/slog"
+)
+
+func main() {
+    zerologLogger := zerolog.New(zerolog.ConsoleWriter{Out: os.Stderr})
+
+    logger := slog.New(slogzerolog.Option{Level: ZeroLogLeveler{&zerologLogger}, Logger: &zerologLogger}.NewZerologHandler())
+
+    logger.Trace("caramba!")
 }
 ```
 
