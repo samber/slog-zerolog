@@ -16,12 +16,21 @@ A [Zerolog](https://github.com/rs/zerolog) Handler for [slog](https://pkg.go.dev
   <hr>
   <sup><b>Sponsored by:</b></sup>
   <br>
-  <a href="https://quickwit.io?utm_campaign=github_sponsorship&utm_medium=referral&utm_content=samber-slog-zerolog&utm_source=github">
+  <a href="https://cast.ai/samuel">
     <div>
-      <img src="https://github.com/samber/oops/assets/2951285/49aaaa2b-b8c6-4f21-909f-c12577bb6a2e" width="240" alt="Quickwit">
+      <img src="https://github.com/user-attachments/assets/502f8fa8-e7e8-4754-a51f-036d0443e694" width="200" alt="Cast AI">
     </div>
     <div>
-      Cloud-native search engine for observability - An OSS alternative to Splunk, Elasticsearch, Loki, and Tempo.
+      Cut Kubernetes & AI costs, boost application stability
+    </div>
+  </a>
+  <br>
+  <a href="https://www.dash0.com?utm_campaign=148395251-samber%20github%20sponsorship&utm_source=github&utm_medium=sponsorship&utm_content=samber">
+    <div>
+      <img src="https://github.com/user-attachments/assets/b1f2e876-0954-4dc3-824d-935d29ba8f3f" width="200" alt="Dash0">
+    </div>
+    <div>
+      100% OpenTelemetry-native observability platform<br>Simple to use, built on open standards, and designed for full cost control
     </div>
   </a>
   <hr>
@@ -89,6 +98,7 @@ GoDoc: [https://pkg.go.dev/github.com/samber/slog-zerolog/v2](https://pkg.go.dev
 ```go
 type Option struct {
     // log level (default: debug)
+	// you can use ZeroLogLeveler to retrieve the level from the global zerolog instance or a custom one
     Level slog.Leveler
 
     // optional: zerolog logger (default: zerolog.Logger)
@@ -185,6 +195,44 @@ func main() {
 	)
 
 	logger.ErrorContext(ctx, "a message")
+}
+```
+
+### Zerolog level mapping
+
+Use the `slogzerolog.ZeroLogLeveler` as `slogzerolog.Option.Level` (`slog.Leveler`) to set the `slog.Level` from 
+`zerolog.Level`.
+
+Currently following levels are mapped:
+
+| zerolog  | slog      | 
+|----------|-----------| 
+| Trace-N  | Debug-1-N | 
+| Trace    | Debug-1   | 
+| Debug    | Debug     | 
+| Info     | Info      | 
+| Warn     | Warn      | 
+| Error    | Error     | 
+| Panic    | Error     | 
+| Fatal    | Error     | 
+| NoLevel  | Info      | 
+| Disabled | Debug-1   |
+| *        | Info      |
+
+```go
+import (
+    "github.com/rs/zerolog"
+    slogzerolog "github.com/samber/slog-zerolog/v2"
+    "os"
+    "log/slog"
+)
+
+func main() {
+    zerologLogger := zerolog.New(zerolog.ConsoleWriter{Out: os.Stderr})
+
+    logger := slog.New(slogzerolog.Option{Level: ZeroLogLeveler{&zerologLogger}, Logger: &zerologLogger}.NewZerologHandler())
+
+    logger.Trace("caramba!")
 }
 ```
 

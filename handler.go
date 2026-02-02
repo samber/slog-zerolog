@@ -12,6 +12,7 @@ import (
 
 type Option struct {
 	// log level (default: debug)
+	// you can use ZeroLogLeveler to retrieve the level from the global zerolog instance or a custom one
 	Level slog.Leveler
 
 	// optional: zerolog logger (default: zerolog.Logger)
