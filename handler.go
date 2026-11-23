@@ -2,6 +2,7 @@ package slogzerolog
 
 import (
 	"context"
+	"slices"
 
 	"log/slog"
 
@@ -104,6 +105,6 @@ func (h *ZerologHandler) WithGroup(name string) slog.Handler {
 	return &ZerologHandler{
 		option: h.option,
 		attrs:  h.attrs,
-		groups: append(h.groups, name),
+		groups: append(slices.Clip(h.groups), name),
 	}
 }
